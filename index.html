@@ -1,0 +1,1045 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Okno_Premium</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Unbounded:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Layout: slim header with small wordmark, clients first, project inside a client, bright brand-coloured tiles (Imzo blue, Akfa orange, Benkam green). Single light theme by request. */
+:root{
+  color-scheme:light;
+  --bg:#F2F6FC; --card:#FFFFFF; --ink:#0E1B33; --mute:#5F6F89; --line:#DCE4F0;
+  --blue:#1557FF; --blue-soft:#E4ECFF; --orange:#FF6B1A; --orange-soft:#FFEBDD; --green:#00A878; --green-soft:#D9F5EC; --pink:#D6336C; --pink-soft:#FDE4EE;
+  --glass:#BFE6F5; --frame:#AEB9C7; --sash:#D5DCE6; --warn:#C2410C; --ok:#067A57;
+  --seg-a:#BFD3FF; --seg-b:#DCE7FF;
+  --sans:'Onest','Segoe UI',system-ui,sans-serif; --brandf:'Unbounded','Onest',sans-serif; --mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+  --shadow:0 1px 2px rgba(14,27,51,.06),0 10px 24px -14px rgba(21,87,255,.28);
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.4;padding-inline:16px;padding-block:0 100px}
+.wrap{max-width:640px;margin:0 auto}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:6;background:rgba(255,255,255,.96);border-bottom:1px solid var(--line);margin-inline:-16px;padding:10px 16px}
+header.top .row1{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.brand{font-family:var(--brandf);font-weight:700;font-size:14px;letter-spacing:.01em}
+.brand i{font-style:normal;color:var(--orange)}.brand b{color:var(--blue);font-weight:700}
+.sync{font-size:12px;color:var(--mute);display:flex;align-items:center;gap:6px;white-space:nowrap}
+.sync:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--mute)}
+.sync.cloud:before{background:var(--green)}.sync.saving:before{background:var(--orange)}.sync.error:before{background:#D92D20}
+.ctx{display:flex;align-items:center;gap:10px;margin-top:8px}
+.ctx .t{min-width:0;flex:1}.ctx .t b{display:block;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ctx .t span{font-size:12px;color:var(--mute)}
+.back{width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;flex:none}
+.back svg{width:18px;height:18px}
+.tot{font-family:var(--mono);font-weight:500;font-size:14px;color:var(--blue);white-space:nowrap}
+h1{font-family:var(--brandf);font-weight:600;font-size:21px;margin:20px 0 4px;letter-spacing:.005em}
+h2{font-size:13px;font-weight:700;color:var(--mute);letter-spacing:.07em;text-transform:uppercase;margin:22px 0 8px}
+.sub{color:var(--mute);font-size:14px;margin:0 0 12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:var(--shadow)}
+.note{color:var(--mute);font-size:13px}
+.banner{background:var(--orange-soft);border:1px solid #FFC9A6;color:#8A3A0A;border-radius:12px;padding:10px 12px;font-size:13px;margin:12px 0}
+.btn{background:var(--blue);color:#fff;border:0;border-radius:12px;padding:12px 18px;font-weight:600;box-shadow:0 8px 16px -8px rgba(21,87,255,.7)}
+.btn.orange{background:var(--orange);box-shadow:0 8px 16px -8px rgba(255,107,26,.75)}
+.btn.green{background:var(--green);box-shadow:0 8px 16px -8px rgba(0,168,120,.7)}
+.btn.ghost{background:var(--card);color:var(--ink);border:1px solid var(--line);box-shadow:none}
+.btn.danger{background:var(--card);color:var(--warn);border:1px solid #F1B38F;box-shadow:none}
+.btn.sm{padding:8px 13px;font-size:13px;border-radius:10px}
+.btn.block{width:100%}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.stack{display:flex;flex-direction:column;gap:12px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.field{display:flex;flex-direction:column;gap:4px;min-width:0}
+.field label,.lbl{font-size:12px;font-weight:600;color:var(--mute)}
+input[type=text],input[type=number],input[type=tel],input[type=search],select,textarea{width:100%;background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;min-width:0}
+input:focus,select:focus,textarea:focus{border-color:var(--blue);outline:none;box-shadow:0 0 0 3px var(--blue-soft)}
+input[type=number]{font-family:var(--mono)}
+.check{display:flex;align-items:center;gap:10px;font-size:14px}
+.check input{width:20px;height:20px;accent-color:var(--blue)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:7px 14px;font-size:14px;font-weight:500}
+.chip[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:#fff}
+.tag{display:inline-block;font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;letter-spacing:.03em}
+.list{display:flex;flex-direction:column;gap:10px}
+.li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;width:100%;text-align:left;box-shadow:var(--shadow)}
+.li .nm{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.li .ds{font-size:13px;color:var(--mute);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.li .rt{text-align:right;font-family:var(--mono);font-size:13px}
+.av{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;font-size:16px}
+.item{display:grid;grid-template-columns:96px minmax(0,1fr);gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px;width:100%;text-align:left;box-shadow:var(--shadow)}
+.item .th{background:var(--blue-soft);border-radius:10px;height:96px;display:grid;place-items:center}
+.item .th svg{width:88px;height:88px;display:block}
+.item .t{font-weight:700;font-size:16px;margin:4px 0 2px}
+.item .m{color:var(--mute);font-size:13px}
+.item .p{font-family:var(--mono);font-size:14px;margin-top:6px;font-weight:500}
+.item .p small{font-family:var(--sans);color:var(--mute);font-weight:400}
+.stats{display:flex;flex-wrap:wrap;gap:8px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 12px;font-size:12px;color:var(--mute)}
+.stat b{display:block;font-family:var(--mono);font-weight:500;font-size:16px;color:var(--ink)}
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.tile{border:0;border-radius:18px;padding:16px;color:#fff;min-height:128px;display:flex;flex-direction:column;justify-content:space-between;text-align:left;position:relative;overflow:hidden;box-shadow:0 14px 24px -14px rgba(14,27,51,.55)}
+.tile:after{content:"";position:absolute;right:-18px;bottom:-18px;width:96px;height:112px;border:5px solid rgba(255,255,255,.28);border-radius:6px;background:linear-gradient(rgba(255,255,255,.28),rgba(255,255,255,.28)) center/5px 100% no-repeat,linear-gradient(rgba(255,255,255,.28),rgba(255,255,255,.28)) center/100% 5px no-repeat}
+.tile .n{font-family:var(--brandf);font-weight:700;font-size:22px;position:relative;z-index:1}
+.tile .c{font-size:13px;opacity:.92;position:relative;z-index:1}
+.ser{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:14px;width:100%;text-align:left;box-shadow:var(--shadow)}
+.ser .nm{font-weight:700;font-size:17px}.ser .ds{font-size:12px;color:var(--mute)}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:10;background:#fff;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav.tabs .wrap{display:grid;grid-template-columns:repeat(3,1fr);padding:6px 8px}
+nav.tabs button{background:none;border:0;border-radius:12px;padding:7px 2px 6px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:12px;font-weight:500;color:var(--mute)}
+nav.tabs button[aria-selected="true"]{color:var(--blue);background:var(--blue-soft);font-weight:700}
+nav.tabs svg{width:22px;height:22px}
+.sheet{position:fixed;inset:0;z-index:30;background:var(--bg);overflow:auto;padding:calc(env(safe-area-inset-top,0px) + 10px) 16px calc(env(safe-area-inset-bottom,0px) + 28px)}
+.sheet .bar{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;position:sticky;top:0;z-index:2;background:var(--bg);padding:4px 0}
+.draw{background:#fff;border:1px solid var(--line);border-radius:14px;padding:8px;box-shadow:var(--shadow)}
+.draw svg{display:block;width:100%;height:auto;max-height:340px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{font-weight:600;color:var(--mute);text-align:left;padding:5px 6px;border-bottom:1.5px solid var(--line);font-size:12px}
+td{padding:6px;border-bottom:1px solid var(--line);vertical-align:top}
+td.n,th.n{text-align:right;font-family:var(--mono);white-space:nowrap}
+.scroll{overflow-x:auto}
+.bar-r{display:flex;height:26px;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:repeating-linear-gradient(135deg,#fff 0 5px,var(--line) 5px 6px)}
+.bar-r span{display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;overflow:hidden;white-space:nowrap;border-right:1px solid #fff}
+.bar-r span:nth-child(odd){background:var(--seg-a)}.bar-r span:nth-child(even){background:var(--seg-b)}
+.barrow{margin-bottom:8px}.barrow .cap{font-family:var(--mono);font-size:11px;color:var(--mute);margin-top:2px;overflow-wrap:anywhere}
+details{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:10px;box-shadow:var(--shadow)}
+summary{cursor:pointer;font-weight:600}
+.sum{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 12px;font-size:14px}
+.sum .v{font-family:var(--mono);text-align:right}
+.sum .fin{font-weight:700;font-size:18px;border-top:1.5px solid var(--line);padding-top:10px;color:var(--blue)}
+.pv{background:#fff;border:1px solid var(--line);border-radius:10px;margin-bottom:12px;display:block;width:100%;height:auto}
+.empty{text-align:center;padding:30px 16px;color:var(--mute)}
+.empty b{display:block;color:var(--ink);font-size:17px;margin-bottom:4px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 86px);background:var(--ink);color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;z-index:60;max-width:90vw}
+.bad{color:var(--warn)}
+@media (prefers-reduced-motion:no-preference){.btn,.chip,.tile,.li,.item,.ser{transition:transform .12s,box-shadow .12s}.tile:active,.li:active,.item:active,.ser:active{transform:scale(.985)}}
+html,body{margin:0}body{-webkit-text-size-adjust:100%}</style>
+</head><body>
+
+<header class="top"><div class="wrap" id="head"></div></header>
+<main class="wrap" id="view"></main>
+<nav class="tabs" id="tabs"><div class="wrap" id="tabsIn"></div></nav>
+
+<script>
+(function(){
+'use strict';
+var $=function(s,r){return (r||document).querySelector(s)};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+var uid=function(){return Math.random().toString(36).slice(2,9)};
+var fmt=function(n){return Math.round(n||0).toLocaleString('ru-RU')};
+var fm2=function(n){return (Math.round((n||0)*100)/100).toLocaleString('ru-RU')};
+var esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+
+var BRANDS=[
+  {id:'imzo',name:'Imzo',c:'#1557FF',s:'#E4ECFF'},
+  {id:'akfa',name:'Akfa',c:'#FF6B1A',s:'#FFEBDD'},
+  {id:'benkam',name:'Benkam',c:'#00A878',s:'#D9F5EC'},
+  {id:'other',name:'Душевые',c:'#D6336C',s:'#FDE4EE'}
+];
+var BR={};BRANDS.forEach(function(b){BR[b.id]=b});
+var MATS={alu:'Алюминий',pvc:'ПВХ',glass:'Стекло'};
+var TYPES={window:'Окно',door:'Дверь',partition:'Перегородка',shower:'Душевая'};
+var SASH={fix:'Глухое',turn:'Поворотное',tilt:'Пов.-откидное',door:'Дверное полотно',slide:'Раздвижное'};
+var ALLOWED={window:['fix','turn','tilt','slide'],door:['door','fix'],partition:['fix','door','slide'],shower:['fix','turn','slide']};
+var KINDN={frame:'Рама',sash:'Створка',impos:'Импост'};
+var HWN={turn:'Фурнитура поворотная',tilt:'Фурнитура пов.-откидная',door:'Дверной комплект (замок, петли, ручка)',slide:'Раздвижной комплект',shower_turn:'Душевая: петли и ручка',shower_slide:'Душевая: ролики и ручка'};
+var FIELDS=[
+  ['frameFace','Рама, видимая ширина, мм'],['sashFace','Створка, ширина профиля, мм'],['imposFace','Импост, ширина, мм'],
+  ['sashOverlap','Напуск створки на раму, мм'],['bite','Заход стекла в фальц, мм'],['gap','Зазор стекла, мм'],
+  ['weld','Припуск на сварку/рез, мм'],['reinfDeduct','Армирование короче профиля, мм'],['barLen','Длина хлыста, мм'],['kerf','Ширина реза, мм'],
+  ['pFrame','Цена рамы, сум/м'],['pSash','Цена створки, сум/м'],['pImpos','Цена импоста, сум/м'],['pReinf','Цена армирования, сум/м'],
+  ['pGasket','Цена уплотнителя, сум/м'],['gasketK','Расход уплотнителя, м на 1 м профиля']
+];
+
+/* ---------- данные по умолчанию ---------- */
+function defConfig(){
+  var PVC={frameFace:60,sashFace:77,imposFace:82,sashOverlap:6,bite:14,gap:4,weld:6,reinf:true,reinfDeduct:70,barLen:6000,kerf:4,pFrame:48000,pSash:52000,pImpos:50000,pReinf:22000,pGasket:3500,gasketK:1,frameless:false};
+  var ALU=Object.assign({},PVC,{frameFace:52,sashFace:62,imposFace:68,sashOverlap:8,bite:12,weld:0,reinf:false,pFrame:135000,pSash:140000,pImpos:130000,pGasket:5000});
+  var SHW=Object.assign({},PVC,{frameFace:20,sashFace:0,imposFace:20,sashOverlap:0,bite:8,gap:3,weld:0,reinf:false,frameless:true,pFrame:60000,pSash:0,pImpos:60000,pGasket:3000});
+  var series={};
+  var add=function(brand,mat,name,o){
+    var id=brand+'-'+mat+'-'+name.toLowerCase().replace(/[^a-z0-9а-я]+/g,'');
+    series[id]=Object.assign({id:id,brand:brand,mat:mat,kind:mat==='glass'?'shower':mat,name:name},mat==='pvc'?PVC:mat==='alu'?ALU:SHW,o||{});
+  };
+  var alu=function(d){var f=d<=65?50:d<=75?52:d<=78?54:d<=98?60:62,k=(d-65)*1200;return {frameFace:f,sashFace:f+10,imposFace:f+16,pFrame:120000+k,pSash:125000+k,pImpos:115000+k}};
+  var pv=function(face,pf){return {frameFace:face,sashFace:face+17,imposFace:face+22,pFrame:pf,pSash:pf+4000,pImpos:pf+2000}};
+  add('imzo','alu','Thermo 65',alu(65));add('imzo','alu','Thermo 75',alu(75));add('imzo','alu','Engelberg Thermo 78',alu(78));
+  add('imzo','pvc','Imzo Trio 60',pv(60,44000));add('imzo','pvc','Imzo Quattro 60',pv(60,50000));
+  add('imzo','pvc','Engelberg 70',pv(70,60000));add('imzo','pvc','Engelberg 7K',pv(70,64000));add('imzo','pvc','Engelberg 8K',pv(80,70000));add('imzo','pvc','Engelberg 8000',pv(80,74000));
+  add('akfa','alu','Thermo 65',alu(65));add('akfa','alu','Thermo 75',alu(75));add('akfa','alu','Thermo 78',alu(78));
+  add('akfa','pvc','Akfa ПВХ 60',pv(60,48000));add('akfa','pvc','Akfa ПВХ 70',pv(70,56000));
+  add('benkam','alu','Thermo 65',alu(65));add('benkam','alu','Thermo 78',alu(78));add('benkam','alu','Thermo 98',alu(98));add('benkam','alu','Thermo 105',alu(105));
+  add('other','glass','Душевая 8 мм');
+  return {
+    verified:false,
+    series:series,
+    prices:{turn:300000,tilt:450000,door:700000,slide:900000,shower_turn:400000,shower_slide:800000,handle:60000,mosq:120000,sill:90000,ebb:60000,labor:120000,install:150000},
+    glass:{g1:{name:'Однокамерный 24 мм',price:180000},g2:{name:'Двухкамерный 32 мм',price:250000},g2e:{name:'Двухкамерный энергосберегающий',price:310000},t8:{name:'Закалённое 8 мм',price:350000},g4:{name:'Одинарное 4 мм',price:90000}}
+  };
+}
+
+/* ---------- хранение: облако (db) + копия на устройстве ---------- */
+var LS='okno-premium-v2';
+function loadLocal(){try{var r=localStorage.getItem(LS);if(r)return JSON.parse(r)}catch(e){}return null}
+var loc=loadLocal();
+var CFG=(loc&&loc.cfg&&loc.cfg.series)?loc.cfg:defConfig();
+var clients=(loc&&loc.clients)||[];
+var DB=null,DL=null;
+function saveLocal(){try{localStorage.setItem(LS,JSON.stringify({cfg:CFG,clients:clients}))}catch(e){}}
+function setSync(st){
+  var el=$('#sync');if(!el)return;el.className='sync '+st;
+  el.textContent={cloud:'Сохранено в облаке',saving:'Сохранение…',local:'Данные на этом телефоне',error:'Ошибка сохранения'}[st]||'';
+  el.setAttribute('data-st',st);
+}
+var timers={},inflight={},lastSync='local';
+function queueSave(key,path,getData){
+  saveLocal();
+  if(!DB){lastSync='local';setSync('local');return}
+  lastSync='saving';setSync('saving');
+  clearTimeout(timers[key]);
+  timers[key]=setTimeout(function flush(){
+    if(inflight[key]){timers[key]=setTimeout(flush,400);return}
+    inflight[key]=true;
+    var data=getData();
+    var p=data===null?DB.doc(path).delete():DB.doc(path).set(JSON.parse(JSON.stringify(data)));
+    p.then(function(){inflight[key]=false;lastSync='cloud';setSync('cloud')},function(){inflight[key]=false;lastSync='error';setSync('error')});
+  },700);
+}
+function saveCfg(){queueSave('cfg','app/config',function(){return CFG})}
+function saveClient(c){queueSave('c'+c.id,'clients/'+c.id,function(){return c})}
+function removeClient(c){clients=clients.filter(function(x){return x!==c});queueSave('c'+c.id,'clients/'+c.id,function(){return null})}
+
+/* ---------- расчёт изделия ---------- */
+function seriesOf(it){return CFG.series[it.sys]||Object.values(CFG.series)[0]}
+function calc(it){
+  var s=seriesOf(it);
+  var W=Math.max(+it.w||0,200),H=Math.max(+it.h||0,200);
+  var f=s.frameFace,im=s.imposFace,n=Math.max(1,it.cols.length);
+  var iw=W-2*f,ih=H-2*f;
+  var tr=+it.transom||0;
+  tr=tr>0?Math.min(Math.max(tr,f+im+100),H-f-im-200):0;
+  var trClear=tr?tr-f-im/2:0;
+  var lowH=tr?ih-trClear-im:ih;
+  var colW=(iw-(n-1)*im)/n;
+  var pieces=[],glass=[],sashes=[],hw={},handles=0,mosqM2=0;
+  var add=function(kind,len,cnt,label){pieces.push({kind:kind,len:Math.round(len),n:cnt,label:label})};
+  add('frame',H+s.weld,2,'Рама, вертикаль');
+  add('frame',W+s.weld,2,'Рама, горизонталь');
+  if(n>1)add('impos',lowH,n-1,'Импост вертикальный');
+  if(tr)add('impos',iw,1,'Импост горизонтальный');
+  it.cols.forEach(function(t,i){
+    var gw,gh,ow=0,oh=0;
+    if(t==='fix'){
+      gw=colW+2*s.bite-s.gap;gh=lowH+2*s.bite-s.gap;
+      glass.push({w:Math.round(gw),h:Math.round(gh),label:'Секция '+(i+1)+' (глухая)'});
+    }else{
+      if(s.frameless){gw=colW-2*s.gap;gh=lowH-2*s.gap;ow=colW;oh=lowH}
+      else{
+        ow=colW+2*s.sashOverlap;oh=lowH+2*s.sashOverlap;
+        add('sash',oh+s.weld,2,'Створка '+(i+1)+', вертикаль');
+        add('sash',ow+s.weld,2,'Створка '+(i+1)+', горизонталь');
+        gw=ow-2*s.sashFace+2*s.bite-s.gap;gh=oh-2*s.sashFace+2*s.bite-s.gap;
+      }
+      glass.push({w:Math.round(Math.max(gw,0)),h:Math.round(Math.max(gh,0)),label:'Секция '+(i+1)+' ('+SASH[t].toLowerCase()+')'});
+      hw[t]=(hw[t]||0)+1;
+      if((t==='turn'||t==='tilt')&&s.kind!=='shower'){handles++;mosqM2+=colW*lowH/1e6}
+    }
+    sashes.push({i:i,t:t});
+  });
+  if(tr)glass.push({w:Math.round(iw+2*s.bite-s.gap),h:Math.round(trClear+2*s.bite-s.gap),label:'Фрамуга (глухая)'});
+  var profileM=0,reinfM=0;
+  pieces.forEach(function(p){profileM+=p.len*p.n/1000;if(s.reinf)reinfM+=Math.max(p.len-s.reinfDeduct,0)*p.n/1000});
+  var glassM2=0;glass.forEach(function(g){glassM2+=g.w*g.h/1e6});
+  return {s:s,W:W,H:H,iw:iw,ih:ih,tr:tr,trClear:trClear,lowH:lowH,colW:colW,pieces:pieces,glass:glass,sashes:sashes,hw:hw,handles:handles,mosqM2:mosqM2,
+    profileM:profileM,reinfM:reinfM,gasketM:profileM*s.gasketK,glassM2:glassM2,areaM2:W*H/1e6,sillM:(W+100)/1000};
+}
+function cutBars(list,barLen,kerf){
+  var arr=list.slice().sort(function(a,b){return b.len-a.len});
+  var bars=[],over=[];
+  arr.forEach(function(p){
+    if(p.len>barLen){over.push(p.len);return}
+    for(var i=0;i<bars.length;i++){
+      var b=bars[i],need=b.pcs.length?p.len+kerf:p.len;
+      if(b.used+need<=barLen){b.used+=need;b.pcs.push(p.len);return}
+    }
+    bars.push({used:p.len,pcs:[p.len]});
+  });
+  return {bars:bars,over:over};
+}
+function projectCalc(prj){
+  var markup=+prj.markup||0,vatP=+prj.vat||0;
+  var calcs=prj.items.map(function(it){return {it:it,c:calc(it)}});
+  var groups={};
+  calcs.forEach(function(x){
+    var q=Math.max(1,+x.it.qty||1);
+    x.c.pieces.forEach(function(p){
+      var key=x.c.s.id+'|'+p.kind;
+      var g=groups[key]||(groups[key]={key:key,s:x.c.s,kind:p.kind,list:[],meters:{}});
+      for(var i=0;i<p.n*q;i++)g.list.push({len:p.len});
+      g.meters[x.it.id]=(g.meters[x.it.id]||0)+p.len*p.n*q/1000;
+    });
+  });
+  Object.values(groups).forEach(function(g){
+    var price=g.kind==='frame'?g.s.pFrame:g.kind==='sash'?g.s.pSash:g.s.pImpos;
+    var r=cutBars(g.list,g.s.barLen,g.s.kerf);
+    g.bars=r.bars;g.over=r.over;g.price=price;
+    g.cost=g.bars.length*g.s.barLen/1000*price;
+    g.total=0;Object.keys(g.meters).forEach(function(k){g.total+=g.meters[k]});
+    g.usedM=0;g.bars.forEach(function(b){g.usedM+=b.used/1000});
+    g.wastePct=g.bars.length?(1-g.usedM/(g.bars.length*g.s.barLen/1000))*100:0;
+  });
+  var P=CFG.prices,lines={},order=[];
+  var addLine=function(key,label,qty,unit,sum){
+    if(!lines[key]){lines[key]={label:label,qty:0,unit:unit,sum:0};order.push(key)}
+    lines[key].qty+=qty;lines[key].sum+=sum;
+  };
+  var itemsOut=calcs.map(function(x){
+    var it=x.it,c=x.c,s=c.s,q=Math.max(1,+it.qty||1),cost=0,profile=0;
+    Object.values(groups).forEach(function(g){if(g.meters[it.id]&&g.total>0)profile+=g.cost*g.meters[it.id]/g.total});
+    cost+=profile;
+    var area=c.areaM2*q;
+    var rm=c.reinfM*q;
+    if(rm){var v=rm*s.pReinf;cost+=v;addLine('reinf|'+s.id,'Армирование, '+s.name,rm,'м',v)}
+    var gm=c.gasketM*q;
+    if(gm){var v2=gm*s.pGasket;cost+=v2;addLine('gask|'+s.id,'Уплотнитель, '+s.name,gm,'м',v2)}
+    var gl=CFG.glass[it.glass]||Object.values(CFG.glass)[0];
+    var ga=c.glassM2*q,v3=ga*gl.price;cost+=v3;addLine('glass|'+it.glass,'Стекло: '+gl.name,ga,'м²',v3);
+    Object.keys(c.hw).forEach(function(t){
+      var key=s.kind==='shower'?(t==='slide'?'shower_slide':'shower_turn'):t;
+      var cnt=c.hw[t]*q,v4=cnt*(P[key]||0);cost+=v4;addLine('hw|'+key,HWN[key]||key,cnt,'шт',v4);
+    });
+    if(c.handles){var cnt2=c.handles*q,v5=cnt2*P.handle;cost+=v5;addLine('handle','Ручки оконные',cnt2,'шт',v5)}
+    if(it.mosq&&c.mosqM2){var mq=c.mosqM2*q,v6=mq*P.mosq;cost+=v6;addLine('mosq','Москитные сетки',mq,'м²',v6)}
+    if(it.sill){var sm=c.sillM*q,v7=sm*P.sill;cost+=v7;addLine('sill','Подоконники',sm,'м',v7)}
+    if(it.ebb){var em=c.sillM*q,v8=em*P.ebb;cost+=v8;addLine('ebb','Отливы',em,'м',v8)}
+    if(+it.lam>0&&profile){var lv=profile*it.lam/100;cost+=lv;addLine('lam','Ламинация профиля',profile,'сум',lv)}
+    var lab=area*P.labor;cost+=lab;addLine('labor','Изготовление',area,'м²',lab);
+    if(it.install){var ins=area*P.install;cost+=ins;addLine('install','Монтаж',area,'м²',ins)}
+    var price=cost*(1+markup/100)*(1+vatP/100);
+    return {it:it,c:c,q:q,area:area,cost:cost,price:price};
+  });
+  var cost=0,area=0,glassM2=0;
+  itemsOut.forEach(function(o){cost+=o.cost;area+=o.area;glassM2+=o.c.glassM2*o.q});
+  var net=cost*(1+markup/100),vat=net*vatP/100;
+  return {groups:Object.values(groups),items:itemsOut,lines:order.map(function(k){return lines[k]}),cost:cost,markup:net-cost,net:net,vat:vat,total:net+vat,area:area,glassM2:glassM2,markupP:markup,vatP:vatP};
+}
+
+/* ---------- чертёж ---------- */
+function drawSVG(it,o){
+  o=o||{};
+  var c=calc(it),s=c.s,W=c.W,H=c.H,dims=o.dims!==false;
+  var pad=dims?50:4,maxW=o.maxW||300,maxH=o.maxH||260;
+  var k=Math.min(maxW/W,maxH/H),w=W*k,h=H*k,X=pad,Y=pad;
+  var VW=w+pad*2,VH=h+pad*2,g='';
+  var R=function(x,y,ww,hh,fill,sw){return '<rect x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+Math.max(ww,0).toFixed(1)+'" height="'+Math.max(hh,0).toFixed(1)+'" fill="'+fill+'" stroke="var(--ink)" stroke-width="'+(sw||1)+'"/>'};
+  var Ln=function(x1,y1,x2,y2){return '<path d="M'+x1.toFixed(1)+' '+y1.toFixed(1)+'L'+x2.toFixed(1)+' '+y2.toFixed(1)+'" stroke="var(--ink)" stroke-width="1" fill="none"/>'};
+  var fd=Math.max(s.frameFace*k,4),imd=Math.max(s.imposFace*k,3);
+  g+=R(X,Y,w,h,'var(--frame)',1.4);
+  var ix=X+fd,iy=Y+fd,iw=w-2*fd,ih=h-2*fd;
+  g+=R(ix,iy,iw,ih,'var(--glass)',1);
+  var n=it.cols.length,lowY=iy,lowH=ih;
+  if(c.tr){
+    var ay=Y+c.tr*k;
+    g+=R(ix,iy,iw,ay-imd/2-iy,'var(--glass)',1);
+    g+=R(ix,ay-imd/2,iw,imd,'var(--frame)',1);
+    lowY=ay+imd/2;lowH=iy+ih-lowY;
+  }
+  var cw=(iw-(n-1)*imd)/n;
+  it.cols.forEach(function(t,i){
+    var x=ix+i*(cw+imd);
+    if(i>0)g+=R(x-imd,lowY,imd,lowH,'var(--frame)',1);
+    if(t==='fix'){g+=R(x,lowY,cw,lowH,'var(--glass)',1);return}
+    var gx,gy,gw,gh;
+    if(s.frameless){gx=x+2;gy=lowY+2;gw=cw-4;gh=lowH-4;g+=R(gx,gy,gw,gh,'var(--glass)',1.3)}
+    else{
+      var so=Math.max(s.sashOverlap*k,1.5),sf=Math.max(s.sashFace*k,4);
+      var sx=x-so,sy=lowY-so,sw=cw+2*so,sh=lowH+2*so;
+      g+=R(sx,sy,sw,sh,'var(--sash)',1.2);
+      gx=sx+sf;gy=sy+sf;gw=sw-2*sf;gh=sh-2*sf;g+=R(gx,gy,gw,gh,'var(--glass)',1);
+    }
+    if(gw<6||gh<6)return;
+    var left=(n===1)?true:(i<n/2);
+    if(t==='turn'||t==='tilt'||t==='door'){
+      if(left)g+='<path d="M'+(gx+gw)+' '+gy+'L'+gx+' '+(gy+gh/2)+'L'+(gx+gw)+' '+(gy+gh)+'" fill="none" stroke="var(--ink)" stroke-width="1"/>';
+      else g+='<path d="M'+gx+' '+gy+'L'+(gx+gw)+' '+(gy+gh/2)+'L'+gx+' '+(gy+gh)+'" fill="none" stroke="var(--ink)" stroke-width="1"/>';
+      if(t==='tilt')g+='<path d="M'+gx+' '+gy+'L'+(gx+gw/2)+' '+(gy+gh)+'L'+(gx+gw)+' '+gy+'" fill="none" stroke="var(--ink)" stroke-width="1" stroke-dasharray="5 4"/>';
+      g+='<rect x="'+(left?gx+gw-1:gx-3).toFixed(1)+'" y="'+(gy+gh/2-9).toFixed(1)+'" width="4" height="18" fill="var(--ink)"/>';
+    }else if(t==='slide'){
+      var mx=gx+gw/2,my=gy+gh/2,L=Math.min(gw*0.32,40),dir=(i%2===0)?1:-1;
+      g+=Ln(mx-L*dir,my,mx+L*dir,my);
+      g+='<path d="M'+(mx+L*dir)+' '+my+'l'+(-8*dir)+' -4 l0 8z" fill="var(--ink)"/>';
+    }
+  });
+  if(dims){
+    var T='font-family="JetBrains Mono,monospace" font-size="11" fill="var(--mute)"';
+    var by=Y+h+24;
+    g+=Ln(X,by,X+w,by)+Ln(X,by-5,X,by+5)+Ln(X+w,by-5,X+w,by+5);
+    g+='<text x="'+(X+w/2)+'" y="'+(by+15)+'" text-anchor="middle" '+T+'>'+Math.round(W)+'</text>';
+    var lx=X-24;
+    g+=Ln(lx,Y,lx,Y+h)+Ln(lx-5,Y,lx+5,Y)+Ln(lx-5,Y+h,lx+5,Y+h);
+    g+='<text transform="translate('+(lx-6)+' '+(Y+h/2)+') rotate(-90)" text-anchor="middle" '+T+'>'+Math.round(H)+'</text>';
+    if(c.tr){
+      var rx=X+w+16;
+      g+=Ln(rx,Y,rx,Y+c.tr*k)+Ln(rx-4,Y,rx+4,Y)+Ln(rx-4,Y+c.tr*k,rx+4,Y+c.tr*k);
+      g+='<text transform="translate('+(rx+14)+' '+(Y+c.tr*k/2)+') rotate(-90)" text-anchor="middle" '+T+'>'+Math.round(it.transom)+'</text>';
+    }
+  }
+  return '<svg viewBox="0 0 '+VW.toFixed(0)+' '+VH.toFixed(0)+'" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Чертёж изделия" preserveAspectRatio="xMidYMid meet">'+g+'</svg>';
+}
+
+/* ---------- состояние и утилиты ---------- */
+var nav={v:'clients',cid:null,pid:null,ptab:'items'};
+var query='';
+function curClient(){return clients.find(function(c){return c.id===nav.cid})}
+function curProject(){var c=curClient();return c?c.projects.find(function(p){return p.id===nav.pid}):null}
+function itemTitle(it,prj){
+  if(it.name)return it.name;
+  return TYPES[it.type]+' '+(prj.items.indexOf(it)+1);
+}
+function brandOf(it){return BR[seriesOf(it).brand]||BRANDS[0]}
+function crumb(s){return (BR[s.brand]||{}).name+' › '+MATS[s.mat]+' › '+s.name}
+function groupPieces(c){
+  var m={};
+  c.pieces.forEach(function(p){var k=p.label+'|'+p.len;if(!m[k])m[k]={label:p.label,len:p.len,n:0};m[k].n+=p.n});
+  return Object.values(m);
+}
+function hwText(c){return Object.keys(c.hw).map(function(t){return SASH[t]+': '+c.hw[t]}).join(', ')}
+function extrasText(it,c){
+  var ex=[];if(it.mosq)ex.push('москитная сетка');if(it.sill)ex.push('подоконник');if(it.ebb)ex.push('отлив');if(it.install)ex.push('монтаж');
+  return ex.join(', ');
+}
+function seriesUsed(id){return clients.some(function(c){return c.projects.some(function(p){return p.items.some(function(i){return i.sys===id})})})}
+function initials(n){var p=String(n||'?').trim().split(/\s+/);return ((p[0]||'?')[0]+((p[1]||'')[0]||'')).toUpperCase()}
+function colorFor(s){var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))%4;return ['#1557FF','#FF6B1A','#00A878','#D6336C'][h]}
+function dateStr(t){return new Date(t).toLocaleDateString('ru-RU')}
+var toastT;
+function toast(msg){
+  $$('.toast').forEach(function(t){t.remove()});
+  var t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);
+  clearTimeout(toastT);toastT=setTimeout(function(){t.remove()},2200);
+}
+
+/* ---------- слои (листы поверх экрана) ---------- */
+var layers=[];
+function openLayer(html,wire,onClose){
+  var d=document.createElement('div');d.className='sheet';d.innerHTML='<div class="wrap">'+html+'</div>';
+  document.body.appendChild(d);
+  var L={el:d,body:d.firstChild,onClose:onClose};layers.push(L);
+  document.body.style.overflow='hidden';
+  if(wire)wire(L);
+  return L;
+}
+function closeLayer(L){
+  L.el.remove();layers=layers.filter(function(x){return x!==L});
+  if(!layers.length)document.body.style.overflow='';
+  if(L.onClose)L.onClose();
+}
+
+/* ---------- каркас ---------- */
+var ICON={
+  clients:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.3-5.5 6.5-5.5s5.9 1.9 6.5 5.5M16 5a3.2 3.2 0 0 1 0 6M18 14.8c2 .7 3.2 2.3 3.5 5.2"/></svg>',
+  catalog:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>',
+  prices:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>',
+  items:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="1.5"/><path d="M12 3v18M4 12h16"/></svg>',
+  cut:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7h18M3 12h18M3 17h18"/><path d="M9 4v6M15 9v6M7 14v6"/></svg>',
+  est:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h9l4 4v14H6z"/><path d="M9 11h7M9 15h7M9 19h4"/></svg>',
+  back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 5l-7 7 7 7"/></svg>'
+};
+function renderHead(){
+  var h='<div class="row1"><div class="brand">Okno<i>_</i><b>Premium</b></div><div class="sync '+lastSync+'" id="sync"></div></div>';
+  var c=curClient(),p=curProject();
+  if(nav.v==='client'&&c)h+='<div class="ctx"><button class="back" id="goBack" aria-label="Назад">'+ICON.back+'</button><div class="t"><b>'+esc(c.name)+'</b><span>'+esc(c.phone||'клиент')+'</span></div></div>';
+  if(nav.v==='project'&&c&&p){
+    var P=projectCalc(p);
+    h+='<div class="ctx"><button class="back" id="goBack" aria-label="Назад">'+ICON.back+'</button><div class="t"><b>'+esc(p.name)+'</b><span>'+esc(c.name)+'</span></div><div class="tot">'+fmt(P.total)+' сум</div></div>';
+  }
+  $('#head').innerHTML=h;setSync(lastSync);
+  var gb=$('#goBack');if(gb)gb.addEventListener('click',function(){
+    if(nav.v==='project'){nav.v='client';nav.pid=null}else{nav.v='clients';nav.cid=null}
+    window.scrollTo(0,0);render();
+  });
+}
+function renderTabs(){
+  var tabs;
+  if(nav.v==='project')tabs=[['items','Изделия'],['cut','Раскрой'],['est','Смета']];
+  else tabs=[['clients','Клиенты'],['catalog','Каталог'],['prices','Цены']];
+  var act=nav.v==='project'?nav.ptab:(nav.v==='client'?'clients':nav.v);
+  $('#tabsIn').innerHTML=tabs.map(function(t){return '<button data-tab="'+t[0]+'" aria-selected="'+(act===t[0])+'">'+ICON[t[0]]+'<span>'+t[1]+'</span></button>'}).join('');
+}
+$('#tabsIn').addEventListener('click',function(e){
+  var b=e.target.closest('[data-tab]');if(!b)return;var t=b.getAttribute('data-tab');
+  if(nav.v==='project')nav.ptab=t;else{nav.v=t;nav.cid=null;nav.pid=null}
+  window.scrollTo(0,0);render();
+});
+function render(){
+  renderHead();renderTabs();
+  var v=$('#view');
+  if(nav.v==='clients')viewClients(v);
+  else if(nav.v==='client')viewClient(v);
+  else if(nav.v==='project')viewProject(v);
+  else if(nav.v==='catalog')viewCatalog(v);
+  else viewPrices(v);
+}
+
+/* ---------- клиенты ---------- */
+function clientRow(c){
+  var last=c.projects.length?projectCalc(c.projects[c.projects.length-1]).total:0;
+  return '<button class="li" data-cid="'+c.id+'"><div class="av" style="background:'+colorFor(c.name)+'">'+esc(initials(c.name))+'</div><div style="min-width:0"><div class="nm">'+esc(c.name)+'</div><div class="ds">'+esc(c.phone||'без телефона')+(c.address?' · '+esc(c.address):'')+'</div></div><div class="rt">'+c.projects.length+' пр.<br><span class="note">'+(last?fmt(last):'')+'</span></div></button>';
+}
+function viewClients(v){
+  v.innerHTML='<h1>Клиенты</h1><p class="sub">База заказчиков. Выберите клиента или добавьте нового.</p>'+
+    '<button class="btn block" id="newClient">+ Новый клиент</button>'+
+    '<div class="field" style="margin-top:14px"><input type="search" id="q" placeholder="Поиск: имя, телефон, адрес" value="'+esc(query)+'" aria-label="Поиск клиента"></div>'+
+    '<div class="list" id="clist" style="margin-top:12px"></div>';
+  var draw=function(){
+    var q=query.toLowerCase().trim();
+    var list=clients.filter(function(c){return !q||(c.name+' '+c.phone+' '+c.address).toLowerCase().indexOf(q)>=0}).sort(function(a,b){return b.created-a.created});
+    $('#clist').innerHTML=list.length?list.map(clientRow).join(''):'<div class="card empty"><b>'+(clients.length?'Никого не нашли':'Пока нет клиентов')+'</b>'+(clients.length?'Измените запрос.':'Нажмите «Новый клиент», введите телефон, имя и адрес. Проект откроется сразу.')+'</div>';
+    $$('#clist [data-cid]').forEach(function(b){b.addEventListener('click',function(){nav.v='client';nav.cid=b.getAttribute('data-cid');window.scrollTo(0,0);render()})});
+  };
+  draw();
+  $('#q').addEventListener('input',function(e){query=e.target.value;draw()});
+  $('#newClient').addEventListener('click',function(){clientForm(null)});
+}
+function clientForm(c){
+  var isNew=!c,d=c||{name:'',phone:'',address:'',note:''};
+  openLayer('<div class="bar"><button class="btn ghost sm" id="fx">Отмена</button><b>'+(isNew?'Новый клиент':'Данные клиента')+'</b><span style="width:70px"></span></div>'+
+    '<div class="stack" style="margin-top:8px">'+
+    '<div class="field"><label for="fPh">Телефон</label><input type="tel" id="fPh" inputmode="tel" placeholder="+998 90 123 45 67" value="'+esc(d.phone)+'"></div>'+
+    '<div class="field"><label for="fNm">Имя</label><input type="text" id="fNm" placeholder="Например, Алишер" value="'+esc(d.name)+'"></div>'+
+    '<div class="field"><label for="fAd">Адрес объекта</label><input type="text" id="fAd" placeholder="Город, район, улица, дом" value="'+esc(d.address)+'"></div>'+
+    '<div class="field"><label for="fNt">Заметка</label><textarea id="fNt" rows="2">'+esc(d.note||'')+'</textarea></div>'+
+    '<button class="btn block" id="fOk">'+(isNew?'Создать клиента и проект':'Сохранить')+'</button>'+
+    (!isNew?'<button class="btn danger block" id="fDel">Удалить клиента</button>':'')+'<div class="note" id="fErr" style="color:var(--warn)"></div></div>',
+  function(L){
+    $('#fx',L.el).addEventListener('click',function(){closeLayer(L)});
+    $('#fOk',L.el).addEventListener('click',function(){
+      var nm=$('#fNm',L.el).value.trim(),ph=$('#fPh',L.el).value.trim();
+      if(!nm&&!ph){$('#fErr',L.el).textContent='Укажите имя или телефон.';return}
+      if(isNew){
+        var cl={id:uid(),name:nm||ph,phone:ph,address:$('#fAd',L.el).value.trim(),note:$('#fNt',L.el).value.trim(),created:Date.now(),projects:[]};
+        var pr=newProject(cl);cl.projects.push(pr);clients.push(cl);saveClient(cl);
+        closeLayer(L);nav.v='project';nav.cid=cl.id;nav.pid=pr.id;nav.ptab='items';window.scrollTo(0,0);render();
+        toast('Клиент создан, проект открыт');
+      }else{
+        c.name=nm||ph;c.phone=ph;c.address=$('#fAd',L.el).value.trim();c.note=$('#fNt',L.el).value.trim();saveClient(c);closeLayer(L);render();
+      }
+    });
+    var del=$('#fDel',L.el);
+    if(del){var armed=false;del.addEventListener('click',function(){
+      if(!armed){armed=true;del.textContent='Точно удалить клиента и все проекты?';setTimeout(function(){armed=false;del.textContent='Удалить клиента'},3500);return}
+      removeClient(c);closeLayer(L);nav.v='clients';nav.cid=null;render();
+    })}
+  });
+}
+function newProject(cl){
+  return {id:uid(),name:'Проект '+(cl.projects.length+1),created:Date.now(),markup:35,vat:0,items:[]};
+}
+function viewClient(v){
+  var c=curClient();if(!c){nav.v='clients';return viewClients(v)}
+  var h='<h1>'+esc(c.name)+'</h1><div class="card stack" style="gap:6px"><div><span class="lbl">Телефон</span><div>'+esc(c.phone||'не указан')+'</div></div><div><span class="lbl">Адрес</span><div>'+esc(c.address||'не указан')+'</div></div>'+(c.note?'<div><span class="lbl">Заметка</span><div>'+esc(c.note)+'</div></div>':'')+'<div><button class="btn ghost sm" id="editC">Изменить данные</button></div></div>';
+  h+='<h2>Проекты</h2><button class="btn block" id="newP">+ Новый проект</button><div class="list" style="margin-top:12px">';
+  c.projects.slice().reverse().forEach(function(p){
+    var P=projectCalc(p);
+    h+='<button class="li" data-pid="'+p.id+'"><div class="av" style="background:var(--blue-soft);color:var(--blue)">'+p.items.length+'</div><div style="min-width:0"><div class="nm">'+esc(p.name)+'</div><div class="ds">'+dateStr(p.created)+' · '+fm2(P.area)+' м²</div></div><div class="rt">'+fmt(P.total)+'<br><span class="note">сум</span></div></button>';
+  });
+  if(!c.projects.length)h+='<div class="card empty"><b>Проектов нет</b>Создайте первый проект.</div>';
+  h+='</div>';
+  v.innerHTML=h;
+  $('#editC').addEventListener('click',function(){clientForm(c)});
+  $('#newP').addEventListener('click',function(){var p=newProject(c);c.projects.push(p);saveClient(c);nav.v='project';nav.pid=p.id;nav.ptab='items';window.scrollTo(0,0);render()});
+  $$('[data-pid]').forEach(function(b){b.addEventListener('click',function(){nav.v='project';nav.pid=b.getAttribute('data-pid');nav.ptab='items';window.scrollTo(0,0);render()})});
+}
+
+/* ---------- проект ---------- */
+function viewProject(v){
+  var c=curClient(),p=curProject();
+  if(!c||!p){nav.v='clients';return viewClients(v)}
+  if(nav.ptab==='items')viewItems(v,c,p);
+  else if(nav.ptab==='cut')viewCut(v,c,p);
+  else viewEst(v,c,p);
+}
+function viewItems(v,c,p){
+  var P=projectCalc(p);
+  var h='<h1>Изделия</h1><div class="stats"><div class="stat">Изделий<b>'+p.items.length+'</b></div><div class="stat">Площадь<b>'+fm2(P.area)+' м²</b></div><div class="stat">Стекло<b>'+fm2(P.glassM2)+' м²</b></div></div>';
+  h+='<div style="margin:14px 0"><button class="btn block" id="addItem">+ Добавить изделие</button></div>';
+  if(!p.items.length)h+='<div class="card empty"><b>В проекте пока пусто</b>Нажмите «Добавить изделие», выберите категорию (Imzo, Akfa, Benkam), материал и серию, затем введите размеры.</div>';
+  h+='<div class="list">';
+  P.items.forEach(function(o){
+    var it=o.it,b=brandOf(it);
+    h+='<button class="item" data-id="'+it.id+'"><div class="th" style="background:'+b.s+'">'+drawSVG(it,{dims:false,maxW:80,maxH:80})+'</div><div style="min-width:0"><span class="tag" style="background:'+b.s+';color:'+b.c+'">'+esc(b.name)+'</span><div class="t">'+esc(itemTitle(it,p))+'</div><div class="m">'+Math.round(o.c.W)+' × '+Math.round(o.c.H)+' мм · '+o.q+' шт · '+esc(o.c.s.name)+'</div><div class="p">'+fmt(o.price)+' <small>сум</small></div></div></button>';
+  });
+  h+='</div>';
+  v.innerHTML=h;
+  $('#addItem').addEventListener('click',function(){
+    openPicker('select',function(s){
+      var it=defItem(s);p.items.push(it);saveClient(c);render();openEditor(c,p,it);
+    });
+  });
+  $$('.item').forEach(function(b){b.addEventListener('click',function(){var it=p.items.find(function(i){return i.id===b.getAttribute('data-id')});if(it)openEditor(c,p,it)})});
+}
+function defItem(s){
+  var shower=s.kind==='shower';
+  return {id:uid(),name:'',type:shower?'shower':'window',sys:s.id,w:shower?1000:1200,h:shower?2000:1400,qty:1,cols:shower?['fix','turn']:['tilt'],transom:0,glass:shower?'t8':'g2',lam:0,mosq:false,sill:false,ebb:false,install:true};
+}
+
+/* ---------- выбор категории → материал → серия ---------- */
+function openPicker(mode,onPick){
+  var st={step:'brand',brand:null,mat:null};
+  var L=openLayer('<div id="pk"></div>',null);
+  function seriesOfBrand(b,m){return Object.values(CFG.series).filter(function(s){return s.brand===b&&(!m||s.mat===m)})}
+  function draw(){
+    var h='<div class="bar"><button class="btn ghost sm" id="pkBack">'+(st.step==='brand'?'Закрыть':'← Назад')+'</button><b>'+(mode==='select'?'Новое изделие':'Каталог профилей')+'</b><span style="width:70px"></span></div>';
+    if(st.step==='brand'){
+      h+='<h1 style="margin-top:8px">Категория</h1><p class="sub">Выберите производителя профиля.</p><div class="tiles">'+BRANDS.map(function(b){
+        return '<button class="tile" data-b="'+b.id+'" style="background:'+b.c+'"><span class="n">'+esc(b.name)+'</span><span class="c">'+seriesOfBrand(b.id).length+' серий</span></button>';
+      }).join('')+'</div>';
+    }else if(st.step==='mat'){
+      var b=BR[st.brand],mats=[];
+      ['alu','pvc','glass'].forEach(function(m){if(seriesOfBrand(st.brand,m).length)mats.push(m)});
+      h+='<h1 style="margin-top:8px">'+esc(b.name)+'</h1><p class="sub">Материал профиля.</p><div class="tiles">'+mats.map(function(m){
+        return '<button class="tile" data-m="'+m+'" style="background:'+b.c+'"><span class="n">'+MATS[m]+'</span><span class="c">'+seriesOfBrand(st.brand,m).length+' серий</span></button>';
+      }).join('')+'</div>';
+      if(!mats.length)h+='<div class="card empty"><b>Серий нет</b>Добавьте первую серию кнопкой ниже.</div>';
+      h+='<div style="margin-top:14px"><button class="btn ghost block" id="addSer">+ Добавить серию</button></div>';
+    }else{
+      var b2=BR[st.brand];
+      h+='<h1 style="margin-top:8px">'+esc(b2.name)+' › '+MATS[st.mat]+'</h1><p class="sub">'+(mode==='select'?'Выберите серию профиля.':'Нажмите на серию, чтобы изменить размеры и цены.')+'</p><div class="list">'+
+        seriesOfBrand(st.brand,st.mat).map(function(s){
+          return '<button class="ser" data-s="'+s.id+'" style="border-color:'+b2.c+'33"><div><div class="nm">'+esc(s.name)+'</div><div class="ds">рама '+s.frameFace+' · створка '+s.sashFace+' мм · '+fmt(s.pFrame)+' сум/м</div></div><span class="tag" style="background:'+b2.s+';color:'+b2.c+'">'+(mode==='select'?'Выбрать':'Изменить')+'</span></button>';
+        }).join('')+'</div><div style="margin-top:14px"><button class="btn ghost block" id="addSer">+ Добавить серию</button></div>';
+    }
+    $('#pk',L.el).innerHTML=h;
+    $('#pkBack',L.el).addEventListener('click',function(){
+      if(st.step==='brand')closeLayer(L);
+      else if(st.step==='mat'){st.step='brand';draw()}
+      else{var ms=['alu','pvc','glass'].filter(function(m){return seriesOfBrand(st.brand,m).length});st.step=(ms.length>1)?'mat':'brand';draw()}
+    });
+    $$('[data-b]',L.el).forEach(function(b){b.addEventListener('click',function(){
+      st.brand=b.getAttribute('data-b');
+      var ms=['alu','pvc','glass'].filter(function(m){return seriesOfBrand(st.brand,m).length});
+      if(ms.length===1){st.mat=ms[0];st.step='series'}else st.step='mat';
+      draw();
+    })});
+    $$('[data-m]',L.el).forEach(function(b){b.addEventListener('click',function(){st.mat=b.getAttribute('data-m');st.step='series';draw()})});
+    $$('[data-s]',L.el).forEach(function(b){b.addEventListener('click',function(){
+      var s=CFG.series[b.getAttribute('data-s')];
+      if(mode==='select'){closeLayer(L);onPick(s)}else seriesEditor(s,draw);
+    })});
+    var as=$('#addSer',L.el);if(as)as.addEventListener('click',function(){
+      var mat=st.mat||(st.brand==='other'?'glass':'alu');
+      var base=seriesOfBrand(st.brand,mat)[0]||Object.values(CFG.series)[0];
+      var s=Object.assign({},base,{id:'s'+uid(),brand:st.brand,mat:mat,kind:mat==='glass'?'shower':mat,name:'Новая серия'});
+      CFG.series[s.id]=s;saveCfg();seriesEditor(s,draw);
+    });
+  }
+  draw();
+}
+function seriesEditor(s,after){
+  var b=BR[s.brand];
+  var inp=function(k,l){return '<div class="field"><label for="se_'+k+'">'+l+'</label><input type="number" inputmode="decimal" id="se_'+k+'" data-k="'+k+'" value="'+s[k]+'"></div>'};
+  openLayer('<div class="bar"><span style="width:70px"></span><b>'+esc(b.name)+' · '+MATS[s.mat]+'</b><button class="btn sm" id="seOk">Готово</button></div>'+
+    '<div class="card note" style="margin:8px 0">Размеры профиля и цены примерные. Впишите значения из каталога поставщика.</div><div class="stack">'+
+    '<div class="field"><label for="seName">Название серии</label><input type="text" id="seName" value="'+esc(s.name)+'"></div>'+
+    '<div class="grid2">'+FIELDS.map(function(f){return inp(f[0],f[1])}).join('')+'</div>'+
+    '<label class="check"><input type="checkbox" id="seReinf"'+(s.reinf?' checked':'')+'>Стальное армирование (для ПВХ)</label>'+
+    '<label class="check"><input type="checkbox" id="seFl"'+(s.frameless?' checked':'')+'>Створка без профиля (стекло, душевые)</label>'+
+    '<button class="btn danger block" id="seDel">Удалить серию</button></div>',
+  function(L){
+    $('#seName',L.el).addEventListener('input',function(e){s.name=e.target.value;saveCfg()});
+    $$('[data-k]',L.el).forEach(function(i){i.addEventListener('input',function(){var n=parseFloat(i.value);s[i.getAttribute('data-k')]=isNaN(n)?0:n;saveCfg()})});
+    $('#seReinf',L.el).addEventListener('change',function(e){s.reinf=e.target.checked;saveCfg()});
+    $('#seFl',L.el).addEventListener('change',function(e){s.frameless=e.target.checked;saveCfg()});
+    $('#seOk',L.el).addEventListener('click',function(){closeLayer(L);if(after)after();render()});
+    var del=$('#seDel',L.el),armed=false;
+    del.addEventListener('click',function(){
+      if(seriesUsed(s.id)){toast('Серия используется в изделиях');return}
+      if(!armed){armed=true;del.textContent='Точно удалить серию?';setTimeout(function(){armed=false;del.textContent='Удалить серию'},3000);return}
+      delete CFG.series[s.id];saveCfg();closeLayer(L);if(after)after();render();
+    });
+  });
+}
+
+/* ---------- редактор изделия ---------- */
+function glassOptions(sel){return Object.keys(CFG.glass).map(function(k){return '<option value="'+k+'"'+(k===sel?' selected':'')+'>'+esc(CFG.glass[k].name)+'</option>'}).join('')}
+function colSelects(it){
+  var al=ALLOWED[it.type];
+  return it.cols.map(function(t,i){
+    return '<div class="field"><label for="col'+i+'">Секция '+(i+1)+'</label><select id="col'+i+'" data-col="'+i+'">'+al.map(function(a){return '<option value="'+a+'"'+(a===t?' selected':'')+'>'+SASH[a]+'</option>'}).join('')+'</select></div>';
+  }).join('');
+}
+function openEditor(c,p,it){
+  var L=openLayer('<div id="ed"></div>',null,function(){render()});
+  build();
+  function save(){saveClient(c)}
+  function build(){
+    var s=seriesOf(it),b=BR[s.brand]||BRANDS[0],shower=s.kind==='shower';
+    var h='<div class="bar"><button class="btn ghost sm" id="eBack">← К списку</button><button class="btn sm" id="eDone">Готово</button></div><div class="stack">';
+    h+='<div class="card" style="border-left:6px solid '+b.c+'"><div class="lbl">'+esc(b.name)+' › '+MATS[s.mat]+'</div><div class="row" style="justify-content:space-between;flex-wrap:nowrap"><div style="font-weight:700;font-size:18px">'+esc(s.name)+'</div><button class="btn ghost sm" id="eChange">Сменить</button></div></div>';
+    h+='<div class="field"><label for="eName">Название изделия</label><input type="text" id="eName" placeholder="'+esc(itemTitle(it,p))+'" value="'+esc(it.name)+'"></div>';
+    if(!shower)h+='<div><div class="lbl" style="margin-bottom:6px">Тип изделия</div><div class="chips" id="eType">'+['window','door','partition'].map(function(k){return '<button class="chip" data-t="'+k+'" aria-pressed="'+(it.type===k)+'">'+TYPES[k]+'</button>'}).join('')+'</div></div>';
+    h+='<div class="grid3"><div class="field"><label for="eW">Ширина, мм</label><input type="number" inputmode="numeric" id="eW" value="'+it.w+'"></div><div class="field"><label for="eH">Высота, мм</label><input type="number" inputmode="numeric" id="eH" value="'+it.h+'"></div><div class="field"><label for="eQ">Кол-во, шт</label><input type="number" inputmode="numeric" id="eQ" value="'+it.qty+'"></div></div>';
+    h+='<div class="row" style="justify-content:space-between"><div class="lbl">Секций по ширине</div><div class="row"><button class="btn ghost sm" id="colMinus" aria-label="Меньше секций">−</button><b style="font-family:var(--mono);font-size:18px" id="colN">'+it.cols.length+'</b><button class="btn ghost sm" id="colPlus" aria-label="Больше секций">+</button></div></div>';
+    h+='<div class="grid2" id="eCols">'+colSelects(it)+'</div>';
+    h+='<div class="field"><label for="eTr">Фрамуга: от верха до импоста, мм (0 — нет)</label><input type="number" inputmode="numeric" id="eTr" value="'+it.transom+'"></div>';
+    h+='<div class="grid2"><div class="field"><label for="eGl">Стекло</label><select id="eGl">'+glassOptions(it.glass)+'</select></div><div class="field"><label for="eLam">Ламинация, наценка %</label><input type="number" inputmode="numeric" id="eLam" value="'+it.lam+'"></div></div>';
+    h+='<div class="grid2"><label class="check"><input type="checkbox" id="eMosq"'+(it.mosq?' checked':'')+'>Москитная сетка</label><label class="check"><input type="checkbox" id="eSill"'+(it.sill?' checked':'')+'>Подоконник</label><label class="check"><input type="checkbox" id="eEbb"'+(it.ebb?' checked':'')+'>Отлив</label><label class="check"><input type="checkbox" id="eIns"'+(it.install?' checked':'')+'>Монтаж</label></div>';
+    h+='<div id="pv" class="stack"></div>';
+    h+='<div class="row"><button class="btn ghost" id="eDup">Дублировать</button><button class="btn danger" id="eDel">Удалить</button></div></div>';
+    $('#ed',L.el).innerHTML=h;wire();preview();
+  }
+  function wireCols(){
+    $$('#eCols select',L.el).forEach(function(sel){sel.addEventListener('change',function(){it.cols[+sel.getAttribute('data-col')]=sel.value;save();preview()})});
+  }
+  function setCols(){$('#colN',L.el).textContent=it.cols.length;$('#eCols',L.el).innerHTML=colSelects(it);wireCols()}
+  function wire(){
+    $('#eBack',L.el).addEventListener('click',function(){closeLayer(L)});
+    $('#eDone',L.el).addEventListener('click',function(){closeLayer(L)});
+    $('#eChange',L.el).addEventListener('click',function(){
+      openPicker('select',function(s){
+        it.sys=s.id;var shower=s.kind==='shower';
+        if(shower){it.type='shower';it.glass='t8';it.cols=it.cols.map(function(t){return ALLOWED.shower.indexOf(t)>=0?t:'fix'})}
+        else if(it.type==='shower'){it.type='window';it.glass='g2';it.cols=['tilt']}
+        save();build();
+      });
+    });
+    $('#eName',L.el).addEventListener('input',function(e){it.name=e.target.value;save()});
+    var ty=$('#eType',L.el);
+    if(ty)ty.addEventListener('click',function(e){
+      var b=e.target.closest('[data-t]');if(!b)return;
+      it.type=b.getAttribute('data-t');var al=ALLOWED[it.type];
+      it.cols=it.cols.map(function(t){return al.indexOf(t)>=0?t:al[0]});save();build();
+    });
+    var num=function(id,key,min){$(id,L.el).addEventListener('input',function(e){var n=parseFloat(e.target.value);it[key]=isNaN(n)?0:Math.max(n,min||0);save();preview()})};
+    num('#eW','w');num('#eH','h');num('#eQ','qty',1);num('#eTr','transom');num('#eLam','lam');
+    $('#eGl',L.el).addEventListener('change',function(e){it.glass=e.target.value;save();preview()});
+    [['#eMosq','mosq'],['#eSill','sill'],['#eEbb','ebb'],['#eIns','install']].forEach(function(q){$(q[0],L.el).addEventListener('change',function(e){it[q[1]]=e.target.checked;save();preview()})});
+    $('#colPlus',L.el).addEventListener('click',function(){if(it.cols.length<4){it.cols.push(ALLOWED[it.type][0]);save();setCols();preview()}});
+    $('#colMinus',L.el).addEventListener('click',function(){if(it.cols.length>1){it.cols.pop();save();setCols();preview()}});
+    wireCols();
+    $('#eDup',L.el).addEventListener('click',function(){
+      var cp=JSON.parse(JSON.stringify(it));cp.id=uid();cp.name=it.name?it.name+' (копия)':'';
+      p.items.splice(p.items.indexOf(it)+1,0,cp);save();it=cp;build();toast('Изделие продублировано');
+    });
+    var del=$('#eDel',L.el),armed=false;
+    del.addEventListener('click',function(){
+      if(!armed){armed=true;del.textContent='Точно удалить?';setTimeout(function(){armed=false;del.textContent='Удалить'},3000);return}
+      p.items=p.items.filter(function(i){return i!==it});save();closeLayer(L);
+    });
+  }
+  function preview(){
+    var P=projectCalc(p),o=P.items.find(function(x){return x.it===it});if(!o)return;
+    var cc=o.c;
+    var h='<div class="draw">'+drawSVG(it)+'</div>';
+    h+='<div class="card"><div class="sum"><span>Себестоимость</span><span class="v">'+fmt(o.cost)+' сум</span><span class="fin">Цена для клиента</span><span class="v fin">'+fmt(o.price)+' сум</span></div><div class="note" style="margin-top:6px">Площадь: '+fm2(o.area)+' м² · стекло: '+fm2(cc.glassM2*o.q)+' м²</div></div>';
+    h+='<h2>Профиль на 1 изделие</h2><div class="card scroll"><table><tr><th>Деталь</th><th class="n">Длина, мм</th><th class="n">Шт</th></tr>'+groupPieces(cc).map(function(r){return '<tr><td>'+esc(r.label)+'</td><td class="n">'+r.len+'</td><td class="n">'+r.n+'</td></tr>'}).join('')+'</table>'+(cc.s.reinf?'<div class="note" style="margin-top:6px">Армирование: '+fm2(cc.reinfM)+' м (короче профиля на '+cc.s.reinfDeduct+' мм)</div>':'')+'</div>';
+    h+='<h2>Стекло на 1 изделие</h2><div class="card scroll"><table><tr><th>Позиция</th><th class="n">Ш × В, мм</th></tr>'+cc.glass.map(function(g){return '<tr><td>'+esc(g.label)+'</td><td class="n">'+g.w+' × '+g.h+'</td></tr>'}).join('')+'</table></div>';
+    if(Object.keys(cc.hw).length)h+='<div class="note">Фурнитура: '+esc(hwText(cc))+'</div>';
+    if(cc.tr)h+='<div class="note">Фрамуга: просвет '+Math.round(cc.trClear)+' мм, нижняя часть '+Math.round(cc.lowH)+' мм.</div>';
+    $('#pv',L.el).innerHTML=h;
+  }
+}
+
+/* ---------- раскрой ---------- */
+function viewCut(v,c,p){
+  var P=projectCalc(p);
+  var h='<h1>Раскрой</h1><p class="sub">Детали разложены по хлыстам с учётом реза, чтобы отхода было меньше. Хлысты покупаются целиком, поэтому смета считает их по количеству хлыстов.</p>';
+  if(!P.groups.length){v.innerHTML=h+'<div class="card empty"><b>Нет данных</b>Добавьте изделия, и здесь появятся карты раскроя.</div>';return}
+  P.groups.sort(function(a,b){return a.key<b.key?-1:1});
+  P.groups.forEach(function(g){
+    var warn=g.over.length?'<div class="bad" style="font-size:13px;margin-bottom:6px">Деталей длиннее хлыста: '+g.over.length+' (до '+Math.max.apply(null,g.over)+' мм). Измените длину хлыста в серии.</div>':'';
+    h+='<details'+(P.groups.length<=3?' open':'')+'><summary>'+esc(g.s.name)+' · '+KINDN[g.kind]+'</summary><div class="stats" style="margin:10px 0"><div class="stat">Хлыстов<b>'+g.bars.length+' × '+(g.s.barLen/1000)+' м</b></div><div class="stat">Отход<b>'+fm2(g.wastePct)+'%</b></div><div class="stat">Стоимость<b>'+fmt(g.cost)+'</b></div></div>'+warn;
+    g.bars.forEach(function(b,i){
+      var segs=b.pcs.map(function(l){var pc=l/g.s.barLen*100;return '<span style="width:'+pc+'%">'+(pc>8?l:'')+'</span>'}).join('');
+      h+='<div class="barrow"><div class="bar-r">'+segs+'</div><div class="cap">№'+(i+1)+': '+b.pcs.join(' + ')+' · остаток '+Math.max(g.s.barLen-b.used,0)+'</div></div>';
+    });
+    h+='</details>';
+  });
+  h+='<h2>Стекло к заказу</h2>';
+  var gm={};
+  P.items.forEach(function(o){
+    var gl=CFG.glass[o.it.glass]||Object.values(CFG.glass)[0];
+    o.c.glass.forEach(function(x){var k=gl.name+'|'+x.w+'|'+x.h;if(!gm[k])gm[k]={pk:gl.name,w:x.w,h:x.h,n:0};gm[k].n+=o.q});
+  });
+  var gl=Object.values(gm).sort(function(a,b){return a.pk<b.pk?-1:a.pk>b.pk?1:b.w*b.h-a.w*a.h});
+  h+='<div class="card scroll"><table><tr><th>Пакет</th><th class="n">Ш × В, мм</th><th class="n">Шт</th></tr>'+gl.map(function(r){return '<tr><td>'+esc(r.pk)+'</td><td class="n">'+r.w+' × '+r.h+'</td><td class="n">'+r.n+'</td></tr>'}).join('')+'</table></div>';
+  h+='<div style="margin-top:14px"><button class="btn green block" id="pdfM">PDF для мастера</button></div>';
+  v.innerHTML=h;
+  $('#pdfM').addEventListener('click',function(){makePdf('master',c,p)});
+}
+
+/* ---------- смета ---------- */
+function viewEst(v,c,p){
+  var P=projectCalc(p);
+  var h='<h1>Смета</h1>';
+  if(!CFG.verified)h+='<div class="banner"><b>Цены пока примерные.</b> Я заложил их как образец, это не прайс поставщика. Замените их своими во вкладках «Каталог» и «Цены», тогда сумма станет точной.</div>';
+  h+='<div class="card stack"><div class="field"><label for="mName">Название проекта</label><input type="text" id="mName" value="'+esc(p.name)+'"></div><div class="grid2"><div class="field"><label for="mMk">Наценка, %</label><input type="number" inputmode="decimal" id="mMk" value="'+p.markup+'"></div><div class="field"><label for="mVat">НДС, % (0 — без НДС)</label><input type="number" inputmode="decimal" id="mVat" value="'+p.vat+'"></div></div></div>';
+  h+='<div id="estBody"></div>';
+  v.innerHTML=h;
+  var draw=function(){
+    var P=projectCalc(p),b='';
+    b+='<h2>Материалы и работа</h2><div class="card scroll"><table><tr><th>Позиция</th><th class="n">Кол-во</th><th class="n">Сумма</th></tr>';
+    P.groups.sort(function(a,x){return a.key<x.key?-1:1}).forEach(function(g){b+='<tr><td>'+esc(g.s.name)+', '+KINDN[g.kind].toLowerCase()+'</td><td class="n">'+g.bars.length+' хл. × '+(g.s.barLen/1000)+' м</td><td class="n">'+fmt(g.cost)+'</td></tr>'});
+    P.lines.forEach(function(l){b+='<tr><td>'+esc(l.label)+'</td><td class="n">'+(l.unit==='сум'?'':fm2(l.qty)+' '+l.unit)+'</td><td class="n">'+fmt(l.sum)+'</td></tr>'});
+    b+='</table></div>';
+    b+='<h2>Итог</h2><div class="card"><div class="sum"><span>Себестоимость</span><span class="v">'+fmt(P.cost)+'</span><span>Наценка '+P.markupP+'%</span><span class="v">+ '+fmt(P.markup)+'</span>'+(P.vatP>0?'<span>НДС '+P.vatP+'%</span><span class="v">+ '+fmt(P.vat)+'</span>':'')+'<span class="fin">Цена для клиента</span><span class="v fin">'+fmt(P.total)+' сум</span></div><div class="note" style="margin-top:8px">Площадь '+fm2(P.area)+' м². Цена за 1 м²: '+(P.area?fmt(P.total/P.area):'0')+' сум. Ваша прибыль: '+fmt(P.markup)+' сум.</div></div>';
+    b+='<h2>Цена по изделиям</h2><div class="card scroll"><table><tr><th>Изделие</th><th class="n">Шт</th><th class="n">Цена</th></tr>'+P.items.map(function(o){return '<tr><td>'+esc(itemTitle(o.it,p))+'<div class="note">'+Math.round(o.c.W)+' × '+Math.round(o.c.H)+' · '+esc(o.c.s.name)+'</div></td><td class="n">'+o.q+'</td><td class="n">'+fmt(o.price)+'</td></tr>'}).join('')+'</table></div>';
+    b+='<details style="margin-top:14px"><summary>Как считается сумма</summary><div class="note" style="margin-top:8px;line-height:1.55">1. Профиль: детали раскладываются по хлыстам, берётся количество целых хлыстов × длина × цена за метр.<br>2. Армирование и уплотнитель: метры × цена из серии.<br>3. Стекло: площадь каждого стекла × цена за м² выбранного пакета.<br>4. Фурнитура, ручки, сетки, подоконники, отливы: количество × цена из вкладки «Цены».<br>5. Изготовление и монтаж: площадь изделия × цена за м².<br>Сумма всего этого, это <b>себестоимость</b>. Затем добавляются наценка и НДС. Все цены вы задаёте сами.</div></details>';
+    b+='<div class="stack" style="margin-top:14px"><button class="btn orange block" id="pdfC">PDF для клиента</button><button class="btn green block" id="pdfM">PDF для мастера</button><button class="btn ghost block" id="cpTxt">Скопировать смету текстом</button></div>';
+    $('#estBody').innerHTML=b;
+    $('#pdfC').addEventListener('click',function(){makePdf('client',c,p)});
+    $('#pdfM').addEventListener('click',function(){makePdf('master',c,p)});
+    $('#cpTxt').addEventListener('click',function(){copyText(clientText(c,p))});
+  };
+  draw();
+  var t;
+  var upd=function(){clearTimeout(t);t=setTimeout(function(){saveClient(c);draw();renderHead()},350)};
+  $('#mName').addEventListener('input',function(e){p.name=e.target.value;saveClient(c);var tt=$('.ctx .t b');if(tt)tt.textContent=p.name});
+  $('#mMk').addEventListener('input',function(e){var n=parseFloat(e.target.value);p.markup=isNaN(n)?0:n;upd()});
+  $('#mVat').addEventListener('input',function(e){var n=parseFloat(e.target.value);p.vat=isNaN(n)?0:n;upd()});
+}
+function clientText(c,p){
+  var P=projectCalc(p);
+  var o=['КОММЕРЧЕСКОЕ ПРЕДЛОЖЕНИЕ · Okno_Premium','Клиент: '+c.name+(c.phone?', '+c.phone:'')+(c.address?'\nАдрес: '+c.address:''),'Проект: '+p.name+' ('+dateStr(Date.now())+')',''];
+  P.items.forEach(function(x,i){o.push((i+1)+'. '+itemTitle(x.it,p)+' '+Math.round(x.c.W)+' × '+Math.round(x.c.H)+' мм, '+x.q+' шт ('+crumb(x.c.s)+') — '+fmt(x.price)+' сум')});
+  o.push('','ИТОГО: '+fmt(P.total)+' сум'+(P.vatP>0?' (с НДС '+P.vatP+'%)':''));
+  return o.join('\n');
+}
+function copyText(text){
+  var fallback=function(){
+    openLayer('<div class="bar"><button class="btn ghost sm" id="cx">Закрыть</button><b>Текст сметы</b><span style="width:70px"></span></div><p class="note">Выделите текст и скопируйте его.</p><textarea id="cb" rows="14" readonly style="font-family:var(--mono);font-size:12px">'+esc(text)+'</textarea>',function(L){
+      $('#cx',L.el).addEventListener('click',function(){closeLayer(L)});setTimeout(function(){var t=$('#cb',L.el);t.focus();t.select()},60);
+    });
+  };
+  try{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(function(){toast('Скопировано')},fallback);return}}catch(e){}
+  fallback();
+}
+
+/* ---------- каталог и цены ---------- */
+function viewCatalog(v){
+  v.innerHTML='<h1>Каталог</h1><p class="sub">Категории и серии профиля. Нажмите на категорию, затем на серию, чтобы изменить размеры и цены.</p><div class="tiles">'+BRANDS.map(function(b){
+    return '<button class="tile" data-b="'+b.id+'" style="background:'+b.c+'"><span class="n">'+esc(b.name)+'</span><span class="c">'+Object.values(CFG.series).filter(function(s){return s.brand===b.id}).length+' серий</span></button>';
+  }).join('')+'</div><div class="note" style="margin-top:14px">Список серий собран по вашим названиям. Если серия стоит не в той категории, откройте её и измените, либо удалите и добавьте заново.</div>';
+  $$('[data-b]',v).forEach(function(b){b.addEventListener('click',function(){openPicker('browse')})});
+}
+function viewPrices(v){
+  var P=CFG.prices;
+  var inp=function(path,label,val){return '<div class="field"><label for="'+path+'">'+label+'</label><input type="number" inputmode="decimal" id="'+path+'" data-p="'+path+'" value="'+val+'"></div>'};
+  var h='<h1>Цены</h1>';
+  h+=CFG.verified?'<div class="card" style="border-left:6px solid var(--green)">Цены отмечены как проверенные.</div>':'<div class="banner"><b>Цены примерные.</b> Впишите свои цены на фурнитуру и стекло здесь, цены на профиль в «Каталоге». Когда всё проверите, нажмите кнопку ниже.</div><button class="btn green block" id="verify">Цены проверены</button>';
+  h+='<h2>Фурнитура и работа, сум</h2><div class="card grid2">'+
+    inp('prices.turn','Поворотная, комплект',P.turn)+inp('prices.tilt','Пов.-откидная, комплект',P.tilt)+inp('prices.door','Дверной комплект',P.door)+inp('prices.slide','Раздвижной комплект',P.slide)+
+    inp('prices.shower_turn','Душевая: петли и ручка',P.shower_turn)+inp('prices.shower_slide','Душевая: ролики и ручка',P.shower_slide)+inp('prices.handle','Ручка оконная',P.handle)+inp('prices.mosq','Москитная сетка, за м²',P.mosq)+
+    inp('prices.sill','Подоконник, за м',P.sill)+inp('prices.ebb','Отлив, за м',P.ebb)+inp('prices.labor','Изготовление, за м²',P.labor)+inp('prices.install','Монтаж, за м²',P.install)+'</div>';
+  h+='<h2>Стекло и стеклопакеты, сум за м²</h2><div class="card grid2">'+Object.keys(CFG.glass).map(function(k){return inp('glass.'+k+'.price',esc(CFG.glass[k].name),CFG.glass[k].price)}).join('')+'</div>';
+  h+='<h2>Резервная копия</h2><div class="card stack"><div class="note">Все клиенты и цены хранятся в памяти этого телефона. Раз в неделю сохраняйте копию и отправляйте себе в Telegram. Если данные пропадут, их можно вернуть из копии.</div><button class="btn block" id="bkSave">Сохранить копию данных</button><button class="btn ghost block" id="bkLoad">Загрузить копию данных</button><input type="file" id="bkFile" accept=".json,application/json" hidden></div>';
+  h+='<div style="margin-top:20px"><button class="btn danger block" id="resetAll">Вернуть цены и серии по умолчанию</button></div>';
+  v.innerHTML=h;
+  $$('[data-p]',v).forEach(function(el){el.addEventListener('input',function(){
+    var path=el.getAttribute('data-p').split('.'),o=CFG;
+    for(var i=0;i<path.length-1;i++)o=o[path[i]];
+    var n=parseFloat(el.value);o[path[path.length-1]]=isNaN(n)?0:n;saveCfg();
+  })});
+  $('#bkSave').addEventListener('click',function(){
+    var blob=new Blob([JSON.stringify({app:'okno-premium',saved:Date.now(),cfg:CFG,clients:clients})],{type:'application/json'});
+    downloadBlob(blob,'Okno_Premium_kopiya_'+new Date().toISOString().slice(0,10)+'.json');toast('Копия сохраняется');
+  });
+  $('#bkLoad').addEventListener('click',function(){$('#bkFile').click()});
+  $('#bkFile').addEventListener('change',function(e){
+    var f=e.target.files&&e.target.files[0];if(!f)return;
+    var rd=new FileReader();
+    rd.onload=function(){
+      try{
+        var d=JSON.parse(rd.result);
+        if(!d||d.app!=='okno-premium'||!d.cfg||!d.cfg.series||!Array.isArray(d.clients))throw new Error('bad');
+        CFG=d.cfg;clients=d.clients;saveLocal();nav={v:'clients',cid:null,pid:null,ptab:'items'};render();toast('Данные загружены: клиентов '+clients.length);
+      }catch(err){toast('Это не файл копии Okno_Premium')}
+    };
+    rd.readAsText(f);
+  });
+  var ve=$('#verify');if(ve)ve.addEventListener('click',function(){CFG.verified=true;saveCfg();render()});
+  var r=$('#resetAll'),armed=false;
+  r.addEventListener('click',function(){
+    if(!armed){armed=true;r.textContent='Точно сбросить? Ваши изменения серий и цен пропадут';setTimeout(function(){armed=false;r.textContent='Вернуть цены и серии по умолчанию'},3500);return}
+    var d=defConfig();
+    clients.forEach(function(cl){cl.projects.forEach(function(pr){pr.items.forEach(function(it){if(!d.series[it.sys]){var s=CFG.series[it.sys];if(s)d.series[it.sys]=s}})})});
+    CFG=d;saveCfg();render();toast('Сброшено');
+  });
+}
+
+function downloadBlob(blob,name){
+  var url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();
+  setTimeout(function(){a.remove();URL.revokeObjectURL(url)},6000);
+}
+/* ---------- PDF ---------- */
+var PW=1240,PH=1754,PM=72;
+var PAL={'var(--ink)':'#0E1B33','var(--glass)':'#BFE6F5','var(--frame)':'#AEB9C7','var(--sash)':'#D5DCE6','var(--mute)':'#5F6F89'};
+function Pdf(title){this.pages=[];this.title=title;this.newPage(true)}
+Pdf.prototype.newPage=function(first){
+  var cv=document.createElement('canvas');cv.width=PW;cv.height=PH;var x=cv.getContext('2d');
+  x.fillStyle='#fff';x.fillRect(0,0,PW,PH);
+  this.pages.push(cv);this.cv=cv;this.x=x;
+  var size=first?40:28;
+  x.textBaseline='alphabetic';x.font='700 '+size+'px Unbounded, Onest, Arial, sans-serif';
+  var cx=PM;[['Okno','#0E1B33'],['_','#FF6B1A'],['Premium','#1557FF']].forEach(function(pt){x.fillStyle=pt[1];x.fillText(pt[0],cx,PM+36);cx+=x.measureText(pt[0]).width});
+  this.t(this.title,PW-PM,PM+32,'500 26px Onest, Arial, sans-serif','#5F6F89','right');
+  x.fillStyle='#1557FF';x.fillRect(PM,PM+60,PW-2*PM,5);
+  x.fillStyle='#FF6B1A';x.fillRect(PM,PM+60,120,5);
+  this.y=PM+110;
+};
+Pdf.prototype.t=function(s,x,y,font,color,align){var c=this.x;c.font=font;c.fillStyle=color||'#0E1B33';c.textAlign=align||'left';c.fillText(String(s),x,y);c.textAlign='left'};
+Pdf.prototype.need=function(h){if(this.y+h>PH-PM-50)this.newPage(false)};
+Pdf.prototype.wrap=function(s,maxW,font){
+  var c=this.x;c.font=font;var words=String(s).split(/\s+/),lines=[],cur='';
+  words.forEach(function(w){var t=cur?cur+' '+w:w;if(c.measureText(t).width>maxW&&cur){lines.push(cur);cur=w}else cur=t});
+  if(cur)lines.push(cur);return lines;
+};
+Pdf.prototype.fit=function(im,x,y,w,h){var sc=Math.min(w/im.width,h/im.height),dw=im.width*sc,dh=im.height*sc;this.x.drawImage(im,x+(w-dw)/2,y+(h-dh)/2,dw,dh)};
+Pdf.prototype.rect=function(x,y,w,h,fill,r){var c=this.x;c.fillStyle=fill;c.beginPath();if(c.roundRect)c.roundRect(x,y,w,h,r||0);else c.rect(x,y,w,h);c.fill()};
+Pdf.prototype.finish=function(){
+  var n=this.pages.length,self=this;
+  this.pages.forEach(function(cv,i){var x=cv.getContext('2d');x.font='400 22px Onest, Arial, sans-serif';x.fillStyle='#8895AB';x.textAlign='center';x.fillText('Okno_Premium · стр. '+(i+1)+' из '+n,PW/2,PH-PM+10);x.textAlign='left'});
+};
+function svgFor(it,maxW,maxH){
+  var s=drawSVG(it,{maxW:maxW,maxH:maxH});
+  Object.keys(PAL).forEach(function(k){s=s.split(k).join(PAL[k])});
+  var m=s.match(/viewBox="0 0 (\d+) (\d+)"/);var w=+m[1],h=+m[2];
+  return s.replace('<svg ','<svg width="'+w*3+'" height="'+h*3+'" ');
+}
+function loadImg(svg){return new Promise(function(res){var im=new Image();im.onload=function(){res(im)};im.onerror=function(){res(null)};im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg)})}
+function loadFonts(){
+  var fs=['700 30px Unbounded','400 24px Onest','500 24px Onest','600 24px Onest','700 24px Onest','500 24px "JetBrains Mono"'];
+  return Promise.all(fs.map(function(f){return document.fonts?document.fonts.load(f,'Аа Okno 123'):null})).catch(function(){});
+}
+function bytesFromDataUrl(u){var b=atob(u.split(',')[1]),a=new Uint8Array(b.length);for(var i=0;i<b.length;i++)a[i]=b.charCodeAt(i);return a}
+function pdfBlob(pages){
+  var enc=new TextEncoder(),parts=[],offs=[],pos=0;
+  var push=function(u){if(typeof u==='string')u=enc.encode(u);parts.push(u);pos+=u.length};
+  var n=pages.length,total=2+n*3,kids=[];
+  for(var i=0;i<n;i++)kids.push((3+i*3)+' 0 R');
+  push('%PDF-1.4\n');
+  offs[1]=pos;push('1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n');
+  offs[2]=pos;push('2 0 obj\n<< /Type /Pages /Kids ['+kids.join(' ')+'] /Count '+n+' >>\nendobj\n');
+  pages.forEach(function(cv,i){
+    var jpg=bytesFromDataUrl(cv.toDataURL('image/jpeg',0.9)),po=3+i*3,co=po+1,io=po+2;
+    offs[po]=pos;push(po+' 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /XObject << /Im0 '+io+' 0 R >> >> /Contents '+co+' 0 R >>\nendobj\n');
+    var cs='q 595.28 0 0 841.89 0 0 cm /Im0 Do Q';
+    offs[co]=pos;push(co+' 0 obj\n<< /Length '+cs.length+' >>\nstream\n'+cs+'\nendstream\nendobj\n');
+    offs[io]=pos;push(io+' 0 obj\n<< /Type /XObject /Subtype /Image /Width '+cv.width+' /Height '+cv.height+' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length '+jpg.length+' >>\nstream\n');push(jpg);push('\nendstream\nendobj\n');
+  });
+  var xr=pos,s='xref\n0 '+(total+1)+'\n0000000000 65535 f \n';
+  for(var k=1;k<=total;k++)s+=('0000000000'+offs[k]).slice(-10)+' 00000 n \n';
+  s+='trailer\n<< /Size '+(total+1)+' /Root 1 0 R >>\nstartxref\n'+xr+'\n%%EOF';
+  push(s);
+  return new Blob(parts,{type:'application/pdf'});
+}
+var F='Onest, Arial, sans-serif',MONO='"JetBrains Mono", monospace';
+async function buildClientPdf(c,p){
+  var P=projectCalc(p),d=new Pdf('Коммерческое предложение');
+  var rows=[['Клиент',c.name],['Телефон',c.phone||'—'],['Адрес',c.address||'—'],['Проект',p.name],['Дата',dateStr(Date.now())]];
+  var ph=rows.length*46+30;d.rect(PM,d.y,PW-2*PM,ph,'#E4ECFF',18);
+  rows.forEach(function(r,i){var yy=d.y+46+i*46-6;d.t(r[0],PM+28,yy,'500 24px '+F,'#5F6F89');d.t(r[1],PM+230,yy,'600 28px '+F,'#0E1B33')});
+  d.y+=ph+40;
+  d.t('Изделия',PM,d.y,'700 32px '+F,'#0E1B33');d.y+=24;
+  for(var i=0;i<P.items.length;i++){
+    var o=P.items[i],it=o.it,h=270;
+    d.need(h+20);
+    var y0=d.y;
+    d.rect(PM,y0,270,h-20,'#F2F6FC',16);
+    var im=await loadImg(svgFor(it,230,200));if(im)d.fit(im,PM+10,y0+10,250,h-40);
+    var tx=PM+300,mw=PW-PM-tx-230,yy=y0+40;
+    d.t((i+1)+'. '+itemTitle(it,p),tx,yy,'700 32px '+F,'#0E1B33');yy+=40;
+    d.t(Math.round(o.c.W)+' × '+Math.round(o.c.H)+' мм · '+o.q+' шт',tx,yy,'500 26px '+MONO,'#1557FF');yy+=38;
+    var lines=[crumb(o.c.s),'Секции: '+it.cols.map(function(t){return SASH[t].toLowerCase()}).join(', ')+(o.c.tr?', фрамуга':''),'Стекло: '+(CFG.glass[it.glass]||{}).name];
+    var ex=extrasText(it,o.c);if(ex)lines.push('Дополнительно: '+ex);
+    lines.forEach(function(l){d.wrap(l,mw,'400 24px '+F).slice(0,2).forEach(function(w){d.t(w,tx,yy,'400 24px '+F,'#33425C');yy+=32})});
+    d.t(fmt(o.price),PW-PM,y0+60,'600 34px '+MONO,'#0E1B33','right');
+    d.t('сум',PW-PM,y0+94,'400 22px '+F,'#5F6F89','right');
+    if(o.q>1)d.t(fmt(o.price/o.q)+' за шт',PW-PM,y0+128,'400 22px '+MONO,'#5F6F89','right');
+    d.x.fillStyle='#DCE4F0';d.x.fillRect(PM,y0+h-8,PW-2*PM,2);
+    d.y+=h;
+  }
+  d.need(220);d.y+=10;
+  var bh=P.vatP>0?200:150;d.rect(PM,d.y,PW-2*PM,bh,'#1557FF',20);
+  var by=d.y+54;
+  if(P.vatP>0){d.t('в том числе НДС '+P.vatP+'%',PM+34,by,'500 26px '+F,'#C9D8FF');d.t(fmt(P.vat)+' сум',PW-PM-34,by,'500 26px '+MONO,'#C9D8FF','right');by+=56}
+  d.t('ИТОГО',PM+34,by+30,'700 36px '+F,'#fff');d.t(fmt(P.total)+' сум',PW-PM-34,by+30,'600 44px '+MONO,'#fff','right');
+  d.y+=bh+30;
+  d.t('Площадь: '+fm2(P.area)+' м²',PM,d.y,'400 24px '+F,'#5F6F89');
+  d.finish();return d.pages;
+}
+async function buildMasterPdf(c,p){
+  var P=projectCalc(p),d=new Pdf('Задание в производство');
+  d.t(c.name+(c.phone?' · '+c.phone:''),PM,d.y,'600 30px '+F,'#0E1B33');d.y+=40;
+  if(c.address){d.t(c.address,PM,d.y,'400 24px '+F,'#5F6F89');d.y+=36}
+  d.t(p.name+' · '+dateStr(Date.now()),PM,d.y,'400 24px '+F,'#5F6F89');d.y+=30;
+  for(var i=0;i<P.items.length;i++){
+    var o=P.items[i],it=o.it,cc=o.c;
+    if(i>0)d.newPage(false);else d.y+=20;
+    d.t((i+1)+'. '+itemTitle(it,p),PM,d.y,'700 40px '+F,'#0E1B33');d.y+=44;
+    d.t(Math.round(cc.W)+' × '+Math.round(cc.H)+' мм · '+o.q+' шт · '+crumb(cc.s),PM,d.y,'500 26px '+F,'#1557FF');d.y+=22;
+    var im=await loadImg(svgFor(it,640,460));
+    if(im){d.rect(PM,d.y,PW-2*PM,520,'#F2F6FC',16);d.fit(im,PM+10,d.y+10,PW-2*PM-20,500)}
+    d.y+=550;
+    var colW=(PW-2*PM-40)/2,y1=d.y,y2=d.y;
+    d.t('Профиль (на 1 изделие)',PM,y1,'700 28px '+F,'#0E1B33');y1+=14;
+    groupPieces(cc).forEach(function(r){y1+=36;d.t(r.label,PM,y1,'400 24px '+F,'#33425C');d.t(r.len+' × '+r.n,PM+colW,y1,'500 24px '+MONO,'#0E1B33','right');d.x.fillStyle='#E6ECF5';d.x.fillRect(PM,y1+8,colW,2)});
+    if(cc.s.reinf){y1+=40;d.t('Армирование короче профиля на '+cc.s.reinfDeduct+' мм',PM,y1,'400 22px '+F,'#5F6F89')}
+    var gx=PM+colW+40;
+    d.t('Стекло (на 1 изделие)',gx,y2,'700 28px '+F,'#0E1B33');y2+=14;
+    cc.glass.forEach(function(g){y2+=36;d.t(g.label,gx,y2,'400 24px '+F,'#33425C');d.t(g.w+' × '+g.h,gx+colW,y2,'500 24px '+MONO,'#0E1B33','right');d.x.fillStyle='#E6ECF5';d.x.fillRect(gx,y2+8,colW,2)});
+    y2+=44;
+    if(Object.keys(cc.hw).length){d.wrap('Фурнитура: '+hwText(cc),colW,'400 24px '+F).forEach(function(l){d.t(l,gx,y2,'400 24px '+F,'#33425C');y2+=32})}
+    var ex=extrasText(it,cc);if(ex){d.wrap('Дополнительно: '+ex,colW,'400 24px '+F).forEach(function(l){d.t(l,gx,y2,'400 24px '+F,'#33425C');y2+=32})}
+    d.t('Стеклопакет: '+(CFG.glass[it.glass]||{}).name,gx,y2,'400 24px '+F,'#33425C');
+  }
+  if(P.groups.length){
+    d.newPage(false);d.t('Раскрой хлыстов',PM,d.y,'700 40px '+F,'#0E1B33');d.y+=40;
+    P.groups.sort(function(a,b){return a.key<b.key?-1:1}).forEach(function(g){
+      d.need(120);
+      d.t(g.s.name+' · '+KINDN[g.kind],PM,d.y,'700 28px '+F,'#0E1B33');
+      d.t(g.bars.length+' хл. × '+(g.s.barLen/1000)+' м · отход '+fm2(g.wastePct)+'%',PW-PM,d.y,'500 24px '+MONO,'#5F6F89','right');d.y+=20;
+      g.bars.forEach(function(b,bi){
+        d.need(74);
+        var bw=PW-2*PM,x0=PM,yy=d.y+10;
+        d.x.fillStyle='#EEF2F8';d.x.fillRect(x0,yy,bw,30);
+        b.pcs.forEach(function(l,k){
+          var w=l/g.s.barLen*bw;d.x.fillStyle=k%2?'#DCE7FF':'#BFD3FF';d.x.fillRect(x0,yy,w-1,30);
+          if(w>70)d.t(l,x0+w/2,yy+22,'500 20px '+MONO,'#0E1B33','center');x0+=w;
+        });
+        d.t('№'+(bi+1)+'  остаток '+Math.max(g.s.barLen-b.used,0),PM,yy+56,'400 20px '+MONO,'#5F6F89');
+        d.y+=74;
+      });
+      d.y+=16;
+    });
+  }
+  d.finish();return d.pages;
+}
+async function makePdf(kind,c,p){
+  if(!p.items.length){toast('Добавьте хотя бы одно изделие');return}
+  toast('Готовлю PDF…');
+  var pages;
+  try{await loadFonts();pages=kind==='client'?await buildClientPdf(c,p):await buildMasterPdf(c,p)}catch(e){toast('Не удалось собрать PDF');return}
+  var blob=pdfBlob(pages);
+  var TRM={'а':'a','б':'b','в':'v','г':'g','д':'d','е':'e','ё':'e','ж':'zh','з':'z','и':'i','й':'y','к':'k','л':'l','м':'m','н':'n','о':'o','п':'p','р':'r','с':'s','т':'t','у':'u','ф':'f','х':'kh','ц':'ts','ч':'ch','ш':'sh','щ':'sch','ъ':'','ы':'y','ь':'','э':'e','ю':'yu','я':'ya'};
+  var safe=function(s){var r=String(s).toLowerCase().split('').map(function(ch){return TRM[ch]!=null?TRM[ch]:ch}).join('').replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'');return r||'proekt'};
+  var fname=(kind==='client'?'Smeta_':'Zadanie_')+safe(c.name)+'_'+safe(p.name)+'.pdf';
+  var imgs=pages.map(function(cv){return '<img class="pv" alt="Страница PDF" src="'+cv.toDataURL('image/jpeg',0.8)+'">'}).join('');
+  openLayer('<div class="bar"><button class="btn ghost sm" id="pvX">Закрыть</button><button class="btn ghost sm" id="pvOpen">Открыть</button><button class="btn sm '+(kind==='client'?'orange':'green')+'" id="pvSave">Скачать PDF</button></div><p class="note" style="margin:6px 0 10px">Так выглядит файл: '+pages.length+' стр. '+(kind==='client'?'В файле для клиента нет себестоимости.':'')+'</p>'+imgs,function(L){
+    $('#pvX',L.el).addEventListener('click',function(){closeLayer(L)});
+    $('#pvSave',L.el).addEventListener('click',function(){
+      downloadBlob(blob,fname);toast('Файл скачивается. Если не появился, нажмите «Открыть»');
+    });
+    $('#pvOpen',L.el).addEventListener('click',function(){
+      var u=URL.createObjectURL(blob);var w=window.open(u,'_blank');if(!w)location.href=u;
+    });
+  });
+}
+
+/* ---------- запуск ---------- */
+render();
+lastSync='local';setSync('local');
+})();
+</script>
+
+</body></html>
